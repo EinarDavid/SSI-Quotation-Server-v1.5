@@ -19,8 +19,8 @@ const getssiCotizacion = async (req, res, next) => {
         // const result = await pool.query('SELECT * FROM ssiCotizacion S JOIN ssiCotizacionDetalle D ON S.numero_cotizacion = D.id_ssicotizacion WHERE D.id_ssiCotizacion = $1', [id]);
 
         if (result.rows.length === 0)
-            return res.status(404).json({
-                message: 'Task not found',
+            return res.json({
+                message: 'No se encontro ningun resultado',
             })
         // if (result.rows.length === 0) {
         //     const result2 = await pool.query('SELECT * FROM ssiCotizacion WHERE id_ssicotizacion = $1', [id]);
@@ -66,7 +66,7 @@ const updatessiCotizacion = async (req, res, next) => {
             [numero_cotizacion, cliente, responsable, fecha, estado, id])
 
         if (result.rows.length === 0)
-            return res.status(404).json({
+            return res.json({
                 message: "Task not found",
             });
 
