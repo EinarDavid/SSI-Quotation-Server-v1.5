@@ -19,9 +19,9 @@ const getssiCotizacion = async (req, res, next) => {
         // const result = await pool.query('SELECT * FROM ssiCotizacion S JOIN ssiCotizacionDetalle D ON S.numero_cotizacion = D.id_ssicotizacion WHERE D.id_ssiCotizacion = $1', [id]);
 
         if (result.rows.length === 0)
-            return res.json({
-                message: 'No se encontro ningun resultado',
-            })
+            return res.json([{
+                estado: 'Null',
+            }])
         // if (result.rows.length === 0) {
         //     const result2 = await pool.query('SELECT * FROM ssiCotizacion WHERE id_ssicotizacion = $1', [id]);
 
