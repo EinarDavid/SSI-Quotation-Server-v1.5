@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
 const { getAllssiCotizacion, createssiCotizacion, getssiCotizacion, updatessiCotizacion } = require('../controllers/ssiCotizacion.controller');
-const { getAllssiCotizacionDetalle, createssiCotizacionDetalle, getssiCotizacionDetalle, deletessiCotizacionDetalle } = require('../controllers/ssiCotizacionDetalle.controller');
+const { getAllssiCotizacionDetalle, createssiCotizacionDetalle, getssiCotizacionDetalle, deletessiCotizacionDetalle, updatessiCotizacionDetalle } = require('../controllers/ssiCotizacionDetalle.controller');
 const { getAllssiCotizacionDetalleLog, createssiCotizacionDetalleLog, getssiCotizacionDetalleLog, deletessiCotizacionDetalleLog } = require('../controllers/ssiCotizacionDetalleLog.controller');
 
 const pool = require('../db');
@@ -28,6 +28,8 @@ router.get('/ssiCotizacionDetalle', getAllssiCotizacionDetalle);
 router.get('/ssiCotizacionDetalle/:id', getssiCotizacionDetalle);
 
 router.post('/ssiCotizacionDetalle', createssiCotizacionDetalle);
+
+router.put('/ssiCotizacionDetalle/:id', updatessiCotizacionDetalle);
 
 router.delete('/ssiCotizacionDetalle/:id', deletessiCotizacionDetalle);
 

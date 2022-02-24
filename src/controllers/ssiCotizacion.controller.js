@@ -39,15 +39,16 @@ const getssiCotizacion = async (req, res, next) => {
 }
 
 const createssiCotizacion = async (req, res, next) => {
-    const { numero_cotizacion, cliente, responsable, fecha, estado } = req.body;
+    const { numero_cotizacion, cliente, responsable, fecha, estado, total_horas } = req.body;
 
     try {
-        const result = await pool.query('INSERT INTO ssiCotizacion (numero_cotizacion, cliente, responsable, fecha, estado) VALUES ($1, $2, $3, $4, $5) RETURNING *', [
+        const result = await pool.query('INSERT INTO ssiCotizacion (numero_cotizacion, cliente, responsable, fecha, estado, total_horas) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *', [
             numero_cotizacion,
             cliente,
             responsable,
             fecha, 
-            estado
+            estado,
+            total_horas
         ]);
 
         res.json(result.rows[0]);
@@ -59,11 +60,11 @@ const createssiCotizacion = async (req, res, next) => {
 
 const updatessiCotizacion = async (req, res, next) => {
     const { id } = req.params;
-    const { numero_cotizacion, cliente, responsable, fecha, estado } = req.body;
+    const { numero_cotizacion, cliente, responsable, fecha, estado, total_horas } = req.body;
 
     try {
-        const result = await pool.query('UPDATE ssiCotizacion SET numero_cotizacion = $1, cliente = $2, responsable = $3, fecha = $4, estado = $5 WHERE numero_cotizacion = $6 RETURNING *',
-            [numero_cotizacion, cliente, responsable, fecha, estado, id])
+        const result = await pool.query('UPDATE ssiCotizacion SET numero_cotizacion = $1, cliente = $2, responsable = $3, fecha = $4, estado = $5, total_horas = $6 WHERE numero_cotizacion = $7 RETURNING *',
+            [numero_cotizacion, cliente, responsable, fecha, estado, total_horas, id])
 
         if (result.rows.length === 0)
             return res.json({

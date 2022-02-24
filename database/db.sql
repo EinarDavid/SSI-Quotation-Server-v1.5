@@ -7,20 +7,21 @@ CREATE TABLE ssiCotizacion(
     responsable VARCHAR(255),
     fecha VARCHAR(255),
     estado VARCHAR(20),
+    total_horas INT,
 );
 
 CREATE TABLE ssiCotizacionDetalle(
     id_ssiCotizacionDetalle SERIAL PRIMARY KEY,
     id_ssiCotizacion INT,
     rol VARCHAR(255),
-    horas VARCHAR(255)
+    horas INT
 );
 
 CREATE TABLE ssiCotizacionDetalleLog(
     id_ssiCotizacionDetalleLog SERIAL PRIMARY KEY,
     id_ssiCotizacion INT,
     rol VARCHAR(255),
-    horas VARCHAR(255),
+    horas INT,
     estado VARCHAR(255)
 );
 
@@ -62,9 +63,10 @@ WHERE D.id_ssiCotizacion = 1;
 -- ALTER TABLE ssiCotizacionDetalle RENAME COLUMN id_cotizacion TO id_ssicotizacion; >Cambiar el nombre de una Columna en una tabla
 
 -- DELETE
-DELETE FROM ssiCotizacion WHERE id_ssicotizacion = 1;
+DELETE FROM ssiCotizacion WHERE id_ssicotizacion = 7;
 
-ALTER TABLE ssiCotizacion
-ADD estado VARCHAR(20) NULL;
+ALTER TABLE ssiCotizacionDetalleLog
+ADD horas INT;
 
-
+ALTER TABLE ssiCotizacionDetalleLog
+DROP COLUMN horas;

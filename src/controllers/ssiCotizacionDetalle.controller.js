@@ -27,23 +27,47 @@ const getssiCotizacionDetalle = async (req, res, next) => {
     }
 
 }
-
 const createssiCotizacionDetalle = async (req, res, next) => {
-    const { id_ssicotizacion, rol, horas} = req.body;
+    const { id_ssicotizacion, valores} = req.body;
+    const detalle = JSON.parse(valores);
+    
+    console.log('Bodyyyyyy',req.body);
+    console.log('detalleeee',detalle);
 
-    try {
-        const result = await pool.query('INSERT INTO ssiCotizacionDetalle (id_ssicotizacion, rol, horas) VALUES ($1, $2, $3) RETURNING *', [
-            id_ssicotizacion, 
-            rol, 
-            horas
-        ]);
+    detalle.map(async({rol, horas})=>{
+        try {
+            const result = await pool.query('INSERT INTO ssiCotizacionDetalle (id_ssicotizacion, rol, horas) VALUES ($1, $2, $3) RETURNING *', [
+                id_ssicotizacion, 
+                rol, 
+                horas
+            ]);
+    
+            res.json(result.rows[0]);
 
-        res.json(result.rows[0]);
-    } catch (error) {
-        next(error);
-        // res.json({ error: error.message }); //esto solo en desarrollo en produccion un 500
-    }
+        } catch (error) {
+            next(error);
+            // res.json({ error: error.message }); //esto solo en desarrollo en produccion un 500
+        }
+    })
+
+    
 }
+// const createssiCotizacionDetalle = async (req, res, next) => {
+//     const { id_ssicotizacion, rol, horas} = req.body;
+
+//     try {
+//         const result = await pool.query('INSERT INTO ssiCotizacionDetalle (id_ssicotizacion, rol, horas) VALUES ($1, $2, $3) RETURNING *', [
+//             id_ssicotizacion, 
+//             rol, 
+//             horas
+//         ]);
+
+//         res.json(result.rows[0]);
+//     } catch (error) {
+//         next(error);
+//         // res.json({ error: error.message }); //esto solo en desarrollo en produccion un 500
+//     }
+// }
 const deletessiCotizacionDetalle = async (req, res, next) => {
     const { id } = req.params;
 
@@ -61,10 +85,29 @@ const deletessiCotizacionDetalle = async (req, res, next) => {
     }
 }
 
+const updatessiCotizacionDetalle = async (req, res, next) => {
+    const { id } = req.params;
+    const { id_ssicotizacion, rol, horas } = req.body;
+
+    try {
+        const result = await pool.query('UPDATE ssiCotizacionDetalle SET id_ssicotizacion = $1, rol = $2, horas = $3 WHERE id_ssicotizaciondetalle = $4 RETURNING *',
+            [id_ssicotizacion, rol, horas, id])
+
+        if (result.rows.length === 0)
+            return res.json({
+                message: "Task not found",
+            });
+
+        return res.json(result.rows[0]);
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     getAllssiCotizacionDetalle,
     getssiCotizacionDetalle,
     createssiCotizacionDetalle,
     deletessiCotizacionDetalle,
-    // updateTask
+    updatessiCotizacionDetalle
 };
