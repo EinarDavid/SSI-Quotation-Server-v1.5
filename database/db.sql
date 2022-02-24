@@ -6,16 +6,18 @@ CREATE TABLE ssiCotizacion(
     cliente VARCHAR(255),
     responsable VARCHAR(255),
     fecha VARCHAR(255),
-    estado VARCHAR(20),
     total_horas INT,
+    estado VARCHAR(20),
 );
 
 CREATE TABLE ssiCotizacionDetalle(
     id_ssiCotizacionDetalle SERIAL PRIMARY KEY,
     id_ssiCotizacion INT,
     rol VARCHAR(255),
-    horas INT
+    horas INT,
+    estadoActivo VARCHAR(20),
 );
+
 
 CREATE TABLE ssiCotizacionDetalleLog(
     id_ssiCotizacionDetalleLog SERIAL PRIMARY KEY,
