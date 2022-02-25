@@ -15,7 +15,7 @@ const getssiCotizacionDetalle = async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const result = await pool.query('SELECT * FROM ssi_quotation_detail WHERE id_order = $1 ', [id]);
+        const result = await pool.query('SELECT * FROM ssi_quotation_detail WHERE id_quotation = $1 ', [id]);
 
         if (result.rows.length === 0)
             return res.status(404).json({
