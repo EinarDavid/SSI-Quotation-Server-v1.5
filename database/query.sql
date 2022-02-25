@@ -66,15 +66,16 @@ CREATE TABLE public."ssi_quotation_detail"
 --    "effort"                 NUMERIC (20, 2),
 --    PRIMARY KEY ("id_quotation_detail")
 -- );
+
 CREATE TABLE public."ssi_quotation_vista"
 (
-   "id_quotation"    SERIAL NOT NULL,
-   "id_order"        CHARACTER VARYING (20),
-   "client"          CHARACTER VARYING (50),
-   "responsible"     CHARACTER VARYING (100),
-   "date"            DATE,
---    "status"          CHARACTER VARYING (20),
-   "total_effort"    NUMERIC (20, 2),
-   "project_code"    CHARACTER VARYING (30),
-   PRIMARY KEY ("id_quotation")
+   "id_quotation_vista"     SERIAL NOT NULL,
+   "sale_order"             CHARACTER VARYING (20),
+   "effort"                 NUMERIC (20, 2),
+   "portfolio"              CHARACTER VARYING (100),
+   "state"                  CHARACTER VARYING (20),
+   "login"                  CHARACTER VARYING (100),
+   "project_code"           CHARACTER VARYING (30),
+   "partner_name"           CHARACTER VARYING (50),
+   PRIMARY KEY ("id_quotation_vista")
 );

@@ -3,6 +3,7 @@ const { Router } = require('express');
 const { getAllssiCotizacion, createssiCotizacion, getssiCotizacion, updatessiCotizacion } = require('../controllers/ssiCotizacion.controller');
 const { getAllssiCotizacionDetalle, createssiCotizacionDetalle, getssiCotizacionDetalle, deletessiCotizacionDetalle, updatessiCotizacionDetalle } = require('../controllers/ssiCotizacionDetalle.controller');
 const { getAllssiCotizacionDetalleLog, createssiCotizacionDetalleLog, getssiCotizacionDetalleLog, deletessiCotizacionDetalleLog } = require('../controllers/ssiCotizacionDetalleLog.controller');
+const { getAllssiCotizacionVista, getssiCotizacionVista } = require('../controllers/ssiCotizacionVista.controller');
 
 const pool = require('../db');
 
@@ -42,5 +43,10 @@ router.get('/ssiCotizacionDetalleLog/:id', getssiCotizacionDetalleLog);
 router.post('/ssiCotizacionDetalleLog', createssiCotizacionDetalleLog);
 
 router.delete('/ssiCotizacionDetalleLog/:id', deletessiCotizacionDetalleLog);
+
+// ROUTES DE COTIZACION VISTA
+router.get('/ssiCotizacionVista', getAllssiCotizacionVista);
+
+router.get('/ssiCotizacionVista/:id', getssiCotizacionVista);
 
 module.exports = router;
