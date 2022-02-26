@@ -4,6 +4,7 @@ const { getAllssiCotizacion, createssiCotizacion, getssiCotizacion, updatessiCot
 const { getAllssiCotizacionDetalle, createssiCotizacionDetalle, getssiCotizacionDetalle, deletessiCotizacionDetalle, updatessiCotizacionDetalle } = require('../controllers/ssiCotizacionDetalle.controller');
 const { getAllssiCotizacionDetalleLog, createssiCotizacionDetalleLog, getssiCotizacionDetalleLog, deletessiCotizacionDetalleLog } = require('../controllers/ssiCotizacionDetalleLog.controller');
 const { getAllssiCotizacionVista, getssiCotizacionVista } = require('../controllers/ssiCotizacionVista.controller');
+const { getAllssiRol } = require('../controllers/ssiRoles.controller');
 
 const pool = require('../db');
 
@@ -48,5 +49,8 @@ router.delete('/ssiCotizacionDetalleLog/:id', deletessiCotizacionDetalleLog);
 router.get('/ssiCotizacionVista', getAllssiCotizacionVista);
 
 router.get('/ssiCotizacionVista/:id', getssiCotizacionVista);
+
+// ROUTES DE ROL
+router.get('/ssiCotizacionRol', getAllssiRol)
 
 module.exports = router;

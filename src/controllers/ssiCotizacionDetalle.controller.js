@@ -3,7 +3,7 @@ const pool = require('../db');
 const getAllssiCotizacionDetalle = async (req, res, next) => {
 
     try {
-        const result = await pool.query('SELECT * FROM ssi_quotation_detail;')
+        const result = await pool.query('SELECT * FROM public.ssi_quotation_detail;')
 
         res.json(result.rows);
     } catch (error) {
@@ -15,7 +15,7 @@ const getssiCotizacionDetalle = async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const result = await pool.query('SELECT * FROM ssi_quotation_detail WHERE id_quotation = $1 ', [id]);
+        const result = await pool.query('SELECT * FROM public.ssi_quotation_detail WHERE id_quotation = $1 ', [id]);
 
         if (result.rows.length === 0)
             return res.status(404).json({
@@ -28,29 +28,29 @@ const getssiCotizacionDetalle = async (req, res, next) => {
 
 }
 const createssiCotizacionDetalle = async (req, res, next) => {
-    const { id_quotation, valores} = req.body; //Cambiar el dato como envio del Cliente
+    const { id_quotation, valores } = req.body; //Cambiar el dato como envio del Cliente
     const detalle = JSON.parse(valores);
 
-    console.log('Bodyyyyyy',req.body);
-    console.log('detalleeee',detalle);
-
-    detalle.map(async({role, effort})=>{
-        try {
-            const result = await pool.query('INSERT INTO ssi_quotation_detail (id_quotation, role, effort) VALUES ($1, $2, $3) RETURNING *', [
-                id_quotation, 
-                role, 
+    // console.log('Bodyyyyyy', req.body);
+    // console.log('detalleeee', detalle);
+    try {
+        detalle.map(async ({ role, effort }) => {
+            const result = await pool.query('INSERT INTO public.ssi_quotation_detail (id_quotation, role, effort) VALUES ($1, $2, $3) RETURNING *', [
+                id_quotation,
+                role,
                 effort
             ]);
-    
-            res.json(result.rows[0]);
+            return result;
+        })
 
-        } catch (error) {
-            next(error);
-            // res.json({ error: error.message }); //esto solo en desarrollo en produccion un 500
-        }
-    })
+        res.json([{ message:'Guardado correctamente'}]);
 
-    
+    } catch (error) {
+        next(error);
+        // res.json({ error: error.message }); //esto solo en desarrollo en produccion un 500
+    }
+
+
 }
 // const createssiCotizacionDetalle = async (req, res, next) => {
 //     const { id_ssicotizacion, rol, horas} = req.body;
@@ -72,7 +72,7 @@ const deletessiCotizacionDetalle = async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const result = await pool.query('DELETE FROM ssi_quotation_detail WHERE id_quotation = $1', [id]);
+        const result = await pool.query('DELETE FROM public.ssi_quotation_detail WHERE id_quotation = $1', [id]);
 
         if (result.rowCount === 0)
             return res.status(404).json({
@@ -90,7 +90,7 @@ const updatessiCotizacionDetalle = async (req, res, next) => {
     const { id_quotation, role, effort } = req.body;
 
     try {
-        const result = await pool.query('UPDATE ssi_quotation_detail SET id_quotation = $1, role = $2, effort = $3 WHERE id_quotation = $4 RETURNING *',
+        const result = await pool.query('UPDATE public.ssi_quotation_detail SET id_quotation = $1, role = $2, effort = $3 WHERE id_quotation = $4 RETURNING *',
             [id_quotation, role, effort, id])
 
         if (result.rows.length === 0)

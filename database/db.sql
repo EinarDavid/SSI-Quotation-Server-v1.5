@@ -65,7 +65,7 @@ WHERE D.id_ssiCotizacion = 1;
 -- ALTER TABLE ssiCotizacionDetalle RENAME COLUMN id_cotizacion TO id_ssicotizacion; >Cambiar el nombre de una Columna en una tabla
 
 -- DELETE
-DELETE FROM ssiCotizacion WHERE id_ssicotizacion = 7;
+DELETE FROM ssi_quotation_detail WHERE id_quotation = 1;
 
 ALTER TABLE ssiCotizacionDetalleLog
 ADD horas INT;

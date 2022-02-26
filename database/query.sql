@@ -67,9 +67,14 @@ CREATE TABLE public."ssi_quotation_detail"
 --    PRIMARY KEY ("id_quotation_detail")
 -- );
 
-CREATE TABLE public."ssi_quotation_vista"
+CREATE TABLE public."ssi_roles"
 (
-   "id_quotation_vista"     SERIAL NOT NULL,
+   "id_role"    SERIAL NOT NULL,
+   "role"       CHARACTER VARYING (30)
+);
+
+CREATE TABLE public."ssi_view_sale_order"
+(
    "sale_order"             CHARACTER VARYING (20),
    "effort"                 NUMERIC (20, 2),
    "portfolio"              CHARACTER VARYING (100),
@@ -77,5 +82,15 @@ CREATE TABLE public."ssi_quotation_vista"
    "login"                  CHARACTER VARYING (100),
    "project_code"           CHARACTER VARYING (30),
    "partner_name"           CHARACTER VARYING (50),
-   PRIMARY KEY ("id_quotation_vista")
+   PRIMARY KEY ("sale_order")
 );
+
+insert into public.ssi_roles (role) values ('Indirect');
+insert into public.ssi_roles (role) values ('Deployment');
+insert into public.ssi_roles (role) values ('Developer');
+insert into public.ssi_roles (role) values ('QA');
+insert into public.ssi_roles (role) values ('Contingency');
+insert into public.ssi_roles (role) values ('Support');
+insert into public.ssi_roles (role) values ('Business analyst');
+insert into public.ssi_roles (role) values ('Software Architect');
+insert into public.ssi_roles (role) values ('Project manager');
