@@ -78,10 +78,34 @@ const updatessiCotizacion = async (req, res, next) => {
     }
 }
 
+const updatessiCotizacionStatus = async (req, res, next) => {
+    const {id} = req.params;
+    const { status } = req.body;
+
+    try {
+        const result = await pool.query('UPDATE public.ssi_quotation SET status = $1 WHERE id_order = $2 RETURNING *',
+        [status, id])
+
+        if (result.rows.length === 0)
+            return res.json({
+                message: "Task not found",
+            });
+
+        return res.json(result.rows[0]);
+        
+        console.log()
+
+    } catch (error) {
+        next(error);
+        
+    }
+}
+
 module.exports = {
     getAllssiCotizacion,
     getssiCotizacion,
     createssiCotizacion,
     // deleteTask, 
-    updatessiCotizacion
+    updatessiCotizacion,
+    updatessiCotizacionStatus
 };

@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const { getAllssiCotizacion, createssiCotizacion, getssiCotizacion, updatessiCotizacion } = require('../controllers/ssiCotizacion.controller');
+const { getAllssiCotizacion, createssiCotizacion, getssiCotizacion, updatessiCotizacion, updatessiCotizacionStatus } = require('../controllers/ssiCotizacion.controller');
 const { getAllssiCotizacionDetalle, createssiCotizacionDetalle, getssiCotizacionDetalle, deletessiCotizacionDetalle, updatessiCotizacionDetalle } = require('../controllers/ssiCotizacionDetalle.controller');
 const { getAllssiCotizacionDetalleLog, createssiCotizacionDetalleLog, getssiCotizacionDetalleLog, deletessiCotizacionDetalleLog } = require('../controllers/ssiCotizacionDetalleLog.controller');
 const { getAllssiCotizacionVista, getssiCotizacionVista } = require('../controllers/ssiCotizacionVista.controller');
@@ -22,6 +22,8 @@ router.get('/ssiCotizacion/:id', getssiCotizacion);
 router.post('/ssiCotizacion', createssiCotizacion);
 
 router.put('/ssiCotizacion/:id', updatessiCotizacion);
+
+router.put('/ssiCotizacionStatus/:id', updatessiCotizacionStatus);
 
 
 // ROUTES DE COTIZACION-DETALLE

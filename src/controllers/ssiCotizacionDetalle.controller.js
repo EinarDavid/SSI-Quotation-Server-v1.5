@@ -15,13 +15,16 @@ const getssiCotizacionDetalle = async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const result = await pool.query('SELECT * FROM public.ssi_quotation_detail WHERE id_quotation = $1 ', [id]);
+        const result = await pool.query('SELECT * FROM public.ssi_quotation_detail WHERE id_quotation = $1', [id]);
 
         if (result.rows.length === 0)
             return res.status(404).json({
                 message: 'Task not found',
             })
         res.json(result.rows);
+
+        // console.log('Result-----',result);
+        // console.log('Reqqqqqqqqqqqqqqqqqqqqqq-----',req);
     } catch (error) {
         next(error);
     }
@@ -34,15 +37,26 @@ const createssiCotizacionDetalle = async (req, res, next) => {
     // console.log('Bodyyyyyy', req.body);
     // console.log('detalleeee', detalle);
     try {
-        detalle.map(async ({ role, effort }) => {
-            const result = await pool.query('INSERT INTO public.ssi_quotation_detail (id_quotation, role, effort) VALUES ($1, $2, $3) RETURNING *', [
+        for (let index = 0; index < detalle.length; index++) {
+            const result = await pool.query('INSERT INTO public.ssi_quotation_detail (id_quotation, role, effort) VALUES ($1, $2, $3) RETURNING * ', [
                 id_quotation,
-                role,
-                effort
+                detalle[index].role,
+                detalle[index].effort
             ]);
-            return result;
-        })
+            console.log('Res----------',result);
+            
+        }
 
+        // detalle.map(async ({ role, effort }) => {
+        //     const result = await pool.query('INSERT INTO public.ssi_quotation_detail (id_quotation, role, effort) VALUES ($1, $2, $3) RETURNING * ', [
+        //         id_quotation,
+        //         role,
+        //         effort
+        //     ]);
+        //     // return result;
+        //     console.log('Res----------',result);
+        // })
+    
         res.json([{ message:'Guardado correctamente'}]);
 
     } catch (error) {

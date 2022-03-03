@@ -94,3 +94,6 @@ insert into public.ssi_roles (role) values ('Support');
 insert into public.ssi_roles (role) values ('Business analyst');
 insert into public.ssi_roles (role) values ('Software Architect');
 insert into public.ssi_roles (role) values ('Project manager');
+
+UPDATE public.ssi_quotation SET status = 'EDIT' WHERE id_order = 'S00086';
+DELETE FROM public.ssi_quotation WHERE id_order = 'S00086';
