@@ -23,8 +23,7 @@ const getssiCotizacionDetalle = async (req, res, next) => {
             })
         res.json(result.rows);
 
-        // console.log('Result-----',result);
-        // console.log('Reqqqqqqqqqqqqqqqqqqqqqq-----',req);
+
     } catch (error) {
         next(error);
     }
@@ -34,8 +33,6 @@ const createssiCotizacionDetalle = async (req, res, next) => {
     const { id_quotation, valores } = req.body; //Cambiar el dato como envio del Cliente
     const detalle = JSON.parse(valores);
 
-    // console.log('Bodyyyyyy', req.body);
-    // console.log('detalleeee', detalle);
     try {
         for (let index = 0; index < detalle.length; index++) {
             const result = await pool.query('INSERT INTO public.ssi_quotation_detail (id_quotation, role, effort) VALUES ($1, $2, $3) RETURNING * ', [
@@ -43,19 +40,11 @@ const createssiCotizacionDetalle = async (req, res, next) => {
                 detalle[index].role,
                 detalle[index].effort
             ]);
-            console.log('Res----------',result);
+            // console.log('Res----------',result);
             
         }
 
-        // detalle.map(async ({ role, effort }) => {
-        //     const result = await pool.query('INSERT INTO public.ssi_quotation_detail (id_quotation, role, effort) VALUES ($1, $2, $3) RETURNING * ', [
-        //         id_quotation,
-        //         role,
-        //         effort
-        //     ]);
-        //     // return result;
-        //     console.log('Res----------',result);
-        // })
+        
     
         res.json([{ message:'Guardado correctamente'}]);
 
@@ -66,22 +55,7 @@ const createssiCotizacionDetalle = async (req, res, next) => {
 
 
 }
-// const createssiCotizacionDetalle = async (req, res, next) => {
-//     const { id_ssicotizacion, rol, horas} = req.body;
 
-//     try {
-//         const result = await pool.query('INSERT INTO ssiCotizacionDetalle (id_ssicotizacion, rol, horas) VALUES ($1, $2, $3) RETURNING *', [
-//             id_ssicotizacion, 
-//             rol, 
-//             horas
-//         ]);
-
-//         res.json(result.rows[0]);
-//     } catch (error) {
-//         next(error);
-//         // res.json({ error: error.message }); //esto solo en desarrollo en produccion un 500
-//     }
-// }
 const deletessiCotizacionDetalle = async (req, res, next) => {
     const { id } = req.params;
 
