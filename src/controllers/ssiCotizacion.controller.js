@@ -101,11 +101,28 @@ const updatessiCotizacionStatus = async (req, res, next) => {
     }
 }
 
+const deletessiCotizacion = async (req, res, next) => {
+    const { id } = req.params;
+
+    try {
+        const result = await pool.query('DELETE FROM public.ssi_quotation WHERE id_order = $1', [id]);
+
+        if (result.rowCount === 0)
+            return res.status(404).json({
+                message: "Task not found",
+            });
+
+        return res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     getAllssiCotizacion,
     getssiCotizacion,
     createssiCotizacion,
-    // deleteTask, 
+    deletessiCotizacion, 
     updatessiCotizacion,
     updatessiCotizacionStatus
 };
