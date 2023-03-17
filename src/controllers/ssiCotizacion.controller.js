@@ -3,9 +3,16 @@ const pool = require('../db');
 const getAllssiCotizacion = async (req, res, next) => {
 
     try {
-        const result = await pool.query('SELECT * FROM public.ssi_quotation;')
+        const result = await pool.query(
+            "SELECT id_quotation, id_order, client, responsible, date,\
+                    (SELECT description FROM PUBLIC.ssi_catalog WHERE cod_value = q.status and cod_entity = 'REQUIREMENT') status, \
+                    total_effort, project_code, \
+                    (SELECT description FROM PUBLIC.ssi_catalog WHERE cod_value = q.project_type and cod_entity = 'PROJECT_TYPE') project_type \
+                FROM PUBLIC.ssi_quotation q "
+        )
 
         res.json(result.rows);
+
     } catch (error) {
         next(error);
     }
@@ -37,6 +44,8 @@ const getssiCotizacion = async (req, res, next) => {
     }
 
 }
+
+
 
 const createssiCotizacion = async (req, res, next) => {
     const { id_order, client, responsible, date, status, total_effort, project_code } = req.body;
@@ -118,11 +127,47 @@ const deletessiCotizacion = async (req, res, next) => {
     }
 }
 
+const getCantQuotation = async (req, res, next) => {
+
+    try {
+        const result = await pool.query('SELECT count (*) FROM public.ssi_quotation;')
+
+        
+        res.json(result.rows);
+        //res.json({ cant: result.length })
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+const getQuotationOne = async (req, res, next) => {
+    const { id } = req.params;
+
+    try {
+        const result = await pool.query('SELECT * FROM public.ssi_quotation WHERE id_quotation = $1', [id]);
+        // const result = await pool.query('SELECT * FROM ssiCotizacion S JOIN ssiCotizacionDetalle D ON S.numero_cotizacion = D.id_ssicotizacion WHERE D.id_ssiCotizacion = $1', [id]);
+
+        if (result.rows.length === 0)
+            return res.json([{
+                status: 'null',
+            }])
+
+
+        res.json(result.rows);
+    } catch (error) {
+        next(error);
+    }
+
+}
+
 module.exports = {
     getAllssiCotizacion,
     getssiCotizacion,
     createssiCotizacion,
     deletessiCotizacion, 
     updatessiCotizacion,
-    updatessiCotizacionStatus
+    updatessiCotizacionStatus,
+    getCantQuotation,
+    getQuotationOne
 };

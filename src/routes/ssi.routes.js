@@ -1,6 +1,7 @@
 const { Router } = require('express');
 
-const { getAllssiCotizacion, createssiCotizacion, getssiCotizacion, updatessiCotizacion, updatessiCotizacionStatus, deletessiCotizacion } = require('../controllers/ssiCotizacion.controller');
+const { getAllssiClients, getAllssiResources, getAllssiCatalogProjectType, getAllssiCatalogRequirement, getAllssiCatalogResource, getAllWeeksByYear, getAllMonths, getAllYears,updatessiQuotation, createssiQuotation, insertResourceDetail, updateResourceDetail, getResourceAllocationDetail, getLabourDaysInformation, getResourceDetailByQuotationId, getInformationByFilters } = require('../controllers/ssiCotizacionLectura.controller');
+const { getAllssiCotizacion, createssiCotizacion, getssiCotizacion, updatessiCotizacion, updatessiCotizacionStatus, deletessiCotizacion, getCantQuotation, getQuotationOne } = require('../controllers/ssiCotizacion.controller');
 const { getAllssiCotizacionDetalle, createssiCotizacionDetalle, getssiCotizacionDetalle, deletessiCotizacionDetalle, updatessiCotizacionDetalle } = require('../controllers/ssiCotizacionDetalle.controller');
 const { getAllssiCotizacionDetalleLog, createssiCotizacionDetalleLog, getssiCotizacionDetalleLog, deletessiCotizacionDetalleLog } = require('../controllers/ssiCotizacionDetalleLog.controller');
 const { getAllssiCotizacionVista, getssiCotizacionVista } = require('../controllers/ssiCotizacionVista.controller');
@@ -26,6 +27,10 @@ router.put('/ssiCotizacion/:id', updatessiCotizacion);
 router.put('/ssiCotizacionStatus/:id', updatessiCotizacionStatus);
 
 router.delete('/ssiCotizacion/:id', deletessiCotizacion);
+
+router.get('/ssiCantQuotation', getCantQuotation);
+
+router.get('/ssiQuotationOne/:id', getQuotationOne);
 
 
 // ROUTES DE COTIZACION-DETALLE
@@ -56,5 +61,29 @@ router.get('/ssiCotizacionVista/:id', getssiCotizacionVista);
 
 // ROUTES DE ROL
 router.get('/ssiCotizacionRol', getAllssiRol)
+
+// ROUTES DE LECTURA (/ssiCotizacionLectura)
+router.get('/ssiCotizacionClients', getAllssiClients)
+router.get('/ssiCotizacionResources', getAllssiResources)
+router.get('/ssiCotizacionCatProjectType', getAllssiCatalogProjectType)
+router.get('/ssiCotizacionCatRequirement', getAllssiCatalogRequirement)
+router.get('/ssiCotizacionCatResource', getAllssiCatalogResource)
+//cotizacion
+router.post('/ssiCotizacionCreatesQuotation', createssiQuotation)
+router.post('/ssiCotizacionUpdatessiQuotation', updatessiQuotation)
+//detalle
+router.post('/ssiCotizacion/InsertResourceDetail', insertResourceDetail)
+router.post('/ssiCotizacion/UpdateResourceDetail', updateResourceDetail)
+router.get('/ssiCotizacionGetResourceByQuotationId/:pidquotation', getResourceDetailByQuotationId)
+router.get('/ssiCotizacionGetResourceAllocationDetail/:presource/:pyear/:pmonth/:pweek', getResourceAllocationDetail)
+
+//Date
+router.get('/ssiCotizacionGetLabourDaysInformation/:pyear/:pmonth/:pweek', getLabourDaysInformation)
+router.get('/ssiCotizacionGetWeeksOfyear/:pyear/:pmonth', getAllWeeksByYear) 
+router.get('/ssiCotizacionGetMonths', getAllMonths)
+router.get('/ssiCotizacionGetYears', getAllYears);
+
+//Filters
+router.get('/ssiCotizacionGetInformationByFilters/:pclient/:presponsible/:pprojectcode/:pprojectctype/:porderfield/:pdesasc', getInformationByFilters)
 
 module.exports = router;

@@ -40,6 +40,7 @@ const createssiCotizacionDetalleLog = async (req, res, next) => {
         ]);
 
         res.json(result.rows[0]);
+
     } catch (error) {
         next(error);
         // res.json({ error: error.message }); //esto solo en desarrollo en produccion un 500
