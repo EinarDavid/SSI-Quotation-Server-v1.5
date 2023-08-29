@@ -7,6 +7,10 @@ const { getAllssiCotizacionDetalleLog, createssiCotizacionDetalleLog, getssiCoti
 const { getAllssiCotizacionVista, getssiCotizacionVista } = require('../controllers/ssiCotizacionVista.controller');
 const { getAllssiRol } = require('../controllers/ssiRoles.controller');
 
+const { SendEmail } = require('../controllers/ssiSendEmail');
+const { APIJiraAsses, APIJiraExec } = require('../controllers/APIJira');
+
+
 const pool = require('../db');
 
 const router = Router();
@@ -80,10 +84,18 @@ router.get('/ssiCotizacionGetResourceAllocationDetail/:presource/:pyear/:pmonth/
 //Date
 router.get('/ssiCotizacionGetLabourDaysInformation/:pyear/:pmonth/:pweek', getLabourDaysInformation)
 router.get('/ssiCotizacionGetWeeksOfyear/:pyear/:pmonth', getAllWeeksByYear) 
-router.get('/ssiCotizacionGetMonths', getAllMonths)
+router.get('/ssiCotizacionGetMonths/:pyear', getAllMonths)
 router.get('/ssiCotizacionGetYears', getAllYears);
 
 //Filters
-router.get('/ssiCotizacionGetInformationByFilters/:pclient/:presponsible/:pprojectcode/:pprojectctype/:porderfield/:pdesasc', getInformationByFilters)
+router.get('/ssiCotizacionGetInformationByFilters/:pclient/:presponsible/:pprojectcode/:pprojectctype/:pstatus/:pstartdate/:penddate/:porderfield/:pdesasc', getInformationByFilters)
+router.post('/ssiCotizacionGetInformationByFilters/', getInformationByFilters)
+
+//SenEmail
+router.post('/sedEmail', SendEmail)
+
+//Jira
+router.post('/APIJiraAsses', APIJiraAsses);
+router.post('/APIJiraExec', APIJiraExec);
 
 module.exports = router;
