@@ -51,7 +51,7 @@ const SendEmail = async (req, res, next) => {
             } else {
                 console.log('Email sent: ' + info.response);
                 return res.json({
-                    message: "Email enviado correctamente.",
+                    message: "Email enviado correctamente",
                 });
             }
         });
