@@ -124,42 +124,46 @@ const getAllYears = async (req, res, next) => {
 const createssiQuotation = async (req, res, next) => {
     const { client, responsible, date, status, total_effort, project_code, project_type, link_jira, project_chgreq_code } = req.body;
     const state = 'BLOCKED';
+    var result = null;
     try {
         // Check if already exists a record of the project in old tables of ODOO
-        const result = await pool.query('SELECT count(*) qty FROM ssi_quotation sq, ssi_quotation_detail sqd \
-                                         WHERE sq.id_quotation = sqd.id_quotation\
-                                           AND upper(sq.project_code) = upper($1)\
-                                           AND sq.status = $2', [project_code,state]);
+        result = await pool.query('SELECT count(*) qty FROM ssi_quotation sq, ssi_quotation_detail sqd \
+                                    WHERE sq.id_quotation = sqd.id_quotation\
+                                    AND upper(sq.project_code) = upper($1)\
+                                    AND sq.status = $2', [project_code,state]);
+
+        console.log("Result:", result.rows[0].qty)                                   
         
         if( result.rows[0].qty == 0){
-            
+            console.log("project_chgreq_code: ", project_chgreq_code);
             if(project_chgreq_code == '' && project_type != 'CHGREQ'){
-                const result = await pool.query('SELECT count(*) qty FROM public.ssi_quotation \
-                                                  WHERE upper(project_code) = upper($1)\
-                                                    AND project_type = $2', [project_code, project_type]);
+                console.log("project_code: ", project_code, " project_type: ", project_type);
+                 result = await pool.query('SELECT count(*) qty FROM public.ssi_quotation \
+                                             WHERE upper(project_code) = upper($1)\
+                                               AND project_type = $2', [project_code, project_type]);
             }else {
                 if(project_chgreq_code == '' && project_type == 'CHGREQ'){
-                    const result = await pool.query('SELECT 1 qty');
+                     result = await pool.query('SELECT 1 qty');
                     res.json({ data: result.rows[0], message: 'Debe ingresar el código del Change Request.' });
                 }else{
                     if(project_chgreq_code != '' && project_type != 'CHGREQ'){
-                        const result = await pool.query('SELECT 1 qty ' );
+                         result = await pool.query('SELECT 1 qty ' );
                         res.json({ data: result.rows[0], message: 'Solo debe ingresar el código del Change Request si se trata de requerimientos del mismo tipo caso contrario dejar vacío ese campo.' });
                     }else{                        
                         if(project_chgreq_code != '' ){ 
-                            const result = await pool.query('SELECT count(*) qty FROM public.ssi_quotation \
-                                                            WHERE upper(project_code) = upper($1)\
-                                                                AND upper(project_chgreq_code) = upper($2)\
-                                                                AND project_type = $3', [project_code, project_chgreq_code, project_type]);                        
+                             result = await pool.query('SELECT count(*) qty FROM public.ssi_quotation \
+                                                        WHERE upper(project_code) = upper($1)\
+                                                          AND upper(project_chgreq_code) = upper($2)\
+                                                          AND project_type = $3', [project_code, project_chgreq_code, project_type]);                        
                         }
                     }
                 }
             }
-
+            console.log("Result:", result.rows[0].qty)   
             if( result.rows[0].qty == 0){
-                
+                console.log("Entro aqui--------")
                 try {
-                    const result = await pool.query('INSERT INTO public.ssi_quotation( client, responsible, date, status, total_effort, project_code, project_type,link_jira,project_chgreq_code) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *', [
+                    const result2 = await pool.query('INSERT INTO public.ssi_quotation( client, responsible, date, status, total_effort, project_code, project_type,link_jira,project_chgreq_code) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *', [
                         client,
                         responsible,
                         date,
@@ -171,7 +175,7 @@ const createssiQuotation = async (req, res, next) => {
                         project_chgreq_code
                     ]);
         
-                    res.json({ data: result.rows[0], message: 'Cotizacion registrada correctamente' });
+                    res.json({ data: result2.rows[0], message: 'Cotizacion registrada correctamente' });
         
                 } catch (error) {
                     next(error);
