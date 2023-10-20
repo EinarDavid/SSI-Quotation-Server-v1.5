@@ -38,7 +38,7 @@ const getAllssiCatalogRequirement = async (req, res, next) => {
     const state = 'A';
     const cod_entity = 'REQUIREMENT';
     try {
-        const result = await pool.query('SELECT * FROM public.ssi_Catalog Where state = $1 and cod_entity = $2 ORDER BY cod_entity;', [state, cod_entity])
+        const result = await pool.query('SELECT * FROM public.ssi_Catalog Where state = $1 and cod_entity = $2 ORDER BY description;', [state, cod_entity])
 
         res.json(result.rows);
     } catch (error) {
@@ -122,7 +122,7 @@ const getAllYears = async (req, res, next) => {
 }
 
 const createssiQuotation = async (req, res, next) => {
-    const { client, responsible, date, status, total_effort, project_code, project_type, link_jira, project_chgreq_code } = req.body;
+    const { client, responsible, date, status, total_effort, total_effort_approved, project_code, project_type, link_jira, project_chgreq_code, id_order } = req.body;
     const state = 'BLOCKED';
     var result = null;
     try {
@@ -159,20 +159,22 @@ const createssiQuotation = async (req, res, next) => {
                     }
                 }
             }
-            console.log("Result:", result.rows[0].qty)   
+            //console.log("Result:", result.rows[0].qty)   
             if( result.rows[0].qty == 0){
-                console.log("Entro aqui--------")
+                //console.log("Entro aqui--------")
                 try {
-                    const result2 = await pool.query('INSERT INTO public.ssi_quotation( client, responsible, date, status, total_effort, project_code, project_type,link_jira,project_chgreq_code) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *', [
+                    const result2 = await pool.query('INSERT INTO public.ssi_quotation( client, responsible, date, status, total_effort, total_effort_approved, project_code, project_type,link_jira,project_chgreq_code, id_order) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *', [
                         client,
                         responsible,
                         date,
                         status,
                         total_effort,
+                        total_effort_approved,
                         project_code,
                         project_type,
                         link_jira,
-                        project_chgreq_code
+                        project_chgreq_code,
+                        id_order
                     ]);
         
                     res.json({ data: result2.rows[0], message: 'Cotizacion registrada correctamente' });
@@ -397,17 +399,21 @@ const getLabourDaysInformation = async (req, res, next) => {
 const getInformationByFilters = async (req, res, next) => {
     //console.log('search---------', req.body)
     
-    const { client,responsible,project_code,project_type,status,date_start,date_end,ordenarPor,total_effort} = req.body;
+    const { client,responsible,project_code,project_type,status,date_start,date_end,ordenarPor,total_effort,total_effort_approved,id_order} = req.body;
 
     let sql = "SELECT id_quotation, id_order, client, responsible, date,\
-                    (SELECT description FROM PUBLIC.ssi_catalog WHERE cod_value = q.status and cod_entity = 'REQUIREMENT') status, \
-                    total_effort, project_code, link_jira,\
+                    (SELECT CASE WHEN COALESCE((SELECT sum(ra.total_effort) FROM public.ssi_quotation ra\
+                                                WHERE id_quotation = q.id_quotation\
+                                                AND status not in ('BLOCKED','REG')\
+                                                GROUP BY id_quotation),0) > 0\
+                                THEN 'ESTIMADO'\
+                                ELSE \
+                                    CASE WHEN status in ('BLOCKED','REG')	THEN 'SOW APROBADO'\
+                                    ELSE description END\
+                                END description \
+                     FROM PUBLIC.ssi_catalog WHERE cod_value = q.status and cod_entity = 'REQUIREMENT' LIMIT 1) status, \
+                    total_effort, total_effort_approved, project_code, link_jira,\
                     (SELECT description FROM PUBLIC.ssi_catalog WHERE cod_value = q.project_type and cod_entity = 'PROJECT_TYPE') project_type, \
-                    CASE WHEN COALESCE((SELECT sum(ra.effort) FROM public.ssi_resource_allocation ra\
-                               WHERE id_quotation = q.id_quotation\
-                                AND state != 'ASGND'\
-                               GROUP BY id_quotation),0) > 0\
-	                     THEN 'EN PROGRESO' ELSE '' END inProgress,\
                     project_chgreq_code\
                 FROM PUBLIC.ssi_quotation q\
                 WHERE 1=1";
@@ -415,12 +421,18 @@ const getInformationByFilters = async (req, res, next) => {
     if(total_effort != ''){
         sql = sql + " AND total_effort = '" + total_effort + "'";
     }
+    if(total_effort_approved != ''){
+        sql = sql + " AND total_effort_approved = '" + total_effort_approved + "'";
+    }
     if(client != ''){
         sql = sql + " AND client = '" + client + "'";
     }
     if(responsible != ''){
         sql = sql + " AND responsible = '" + responsible + "'";
     }   
+    if(id_order != ''){
+        sql = sql + " AND id_order like '" + id_order + "%'";
+    }
     if(project_code != ''){
         sql = sql + " AND project_code like '" + project_code + "%'";
     }
@@ -428,7 +440,10 @@ const getInformationByFilters = async (req, res, next) => {
         sql = sql + " AND project_type = '" + project_type + "'";
     }
     if(status != ''){
-        sql = sql + " AND status = '" + status + "'";
+        if(status == 'REG' || status == 'BLOCKED')
+            sql = sql + " AND status in  ('BLOCKED','REG')";
+        else
+            sql = sql + " AND status = '" + status + "'";
     }        
     if(date_start != '' && date_end != ''){
         sql = sql + " AND date BETWEEN '"+ date_start + "' AND '" + date_end + "'"; 
@@ -447,7 +462,7 @@ const getInformationByFilters = async (req, res, next) => {
         //console.log('-------------SQL:', sql);   
 
         const result = await pool.query(sql)
-        //console.log('query');
+        //console.log('RESULT----------------', result.rows);
         res.json(result.rows);
 
     } catch (error) {

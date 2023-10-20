@@ -143,9 +143,15 @@ const getCantQuotation = async (req, res, next) => {
 
 const getQuotationOne = async (req, res, next) => {
     const { id } = req.params;
-
+    //console.log("Entro a Quotation One----------")
     try {
-        const result = await pool.query('SELECT * FROM public.ssi_quotation WHERE id_quotation = $1', [id]);
+        const result = await pool.query("SELECT q.*,\
+                                                CASE WHEN COALESCE((SELECT sum(ra.effort) FROM public.ssi_quotation_detail ra\
+                                                                    WHERE id_quotation = q.id_quotation\
+                                                                    GROUP BY id_quotation),0) > 0\
+                                                        THEN 'ESTIMADO'\
+                                                    ELSE '' END inProgress\
+                                        FROM public.ssi_quotation q WHERE id_quotation = $1", [id]);
         // const result = await pool.query('SELECT * FROM ssiCotizacion S JOIN ssiCotizacionDetalle D ON S.numero_cotizacion = D.id_ssicotizacion WHERE D.id_ssiCotizacion = $1', [id]);
 
         if (result.rows.length === 0)
@@ -153,10 +159,11 @@ const getQuotationOne = async (req, res, next) => {
                 status: 'null',
             }])
 
-
+        //console.log("Ressssss",result.rows)
         res.json(result.rows);
     } catch (error) {
         next(error);
+        //console.log(error)
     }
 
 }

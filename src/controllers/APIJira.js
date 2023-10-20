@@ -1,8 +1,15 @@
 const axios = require('axios');
 const APIJiraAsses = async (req, res, next) => {
   try {
-    //console.log('-------Body', req.body);
+    console.log('-------Body', req.body);
+    var effort = 0;
 
+    if(Number(req.body.total_effort_approved) !== 0){
+      effort = req.body.total_effort_approved;
+    } else {
+      effort = req.body.total_effort
+    }
+    console.log("Effort-----------",effort)
     //const url = 'https://salamancasolutions.atlassian.net/rest/api/3/issue/SSI-123';
     const url = 'https://salamancasolutions.atlassian.net/rest/api/3/issue/' + req.body.project_code;
     var username = process.env.JIRA_USER;
@@ -16,7 +23,7 @@ const APIJiraAsses = async (req, res, next) => {
 
     const requestData = {
       fields: {
-        customfield_10208: Number(req.body.total_effort),
+        customfield_10208: Number(effort),
         //customfield_10209: null
       }
     };
@@ -32,15 +39,22 @@ const APIJiraAsses = async (req, res, next) => {
 
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Hubo un error en la solicitud.' });
+    return res.json({ message: 'Hubo un error en la solicitud al actualizar el Jira. Verifique si el Código Jira existe' });
   }
 
 }
 
 const APIJiraExec = async (req, res, next) => {
   try {
-    //console.log('-------Body', req.body);
+    console.log('-------Body', req.body);
+    var effort = 0;
 
+    if(Number(req. body.total_effort_approved) !== 0){
+      effort = req.body.total_effort_approved;
+    } else {
+      effort = req.body.total_effort
+    }
+    console.log("Effort-----------",effort)
     //const url = 'https://salamancasolutions.atlassian.net/rest/api/3/issue/SSI-123';
     const url = 'https://salamancasolutions.atlassian.net/rest/api/3/issue/' + req.body.project_code;
     var username = process.env.JIRA_USER;
@@ -54,7 +68,7 @@ const APIJiraExec = async (req, res, next) => {
 
     const requestData = {
       fields: {
-        customfield_10209: Number(req.body.total_effort),
+        customfield_10209: Number(effort),
         //customfield_10209: null
       }
     };
@@ -70,7 +84,7 @@ const APIJiraExec = async (req, res, next) => {
 
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Hubo un error en la solicitud.' });
+    return res.json({ message: 'Hubo un error en la solicitud al actualizar el Jira. Verifique si el Código Jira existe' });
   }
 
 }

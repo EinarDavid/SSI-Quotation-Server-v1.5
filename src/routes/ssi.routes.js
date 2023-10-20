@@ -5,7 +5,8 @@ const { getAllssiCotizacion, createssiCotizacion, getssiCotizacion, updatessiCot
 const { getAllssiCotizacionDetalle, createssiCotizacionDetalle, getssiCotizacionDetalle, deletessiCotizacionDetalle, updatessiCotizacionDetalle } = require('../controllers/ssiCotizacionDetalle.controller');
 const { getAllssiCotizacionDetalleLog, createssiCotizacionDetalleLog, getssiCotizacionDetalleLog, deletessiCotizacionDetalleLog } = require('../controllers/ssiCotizacionDetalleLog.controller');
 const { getAllssiCotizacionVista, getssiCotizacionVista } = require('../controllers/ssiCotizacionVista.controller');
-const { getAllssiRol } = require('../controllers/ssiRoles.controller');
+const { getAllssiRol,getAllssiDetailQuotation } = require('../controllers/ssiRoles.controller');
+const { getAllssiCotizacionDetalleRol, createssiCotizacionDetalleRol, getssiCotizacionDetalleRol, deletessiCotizacionDetalleRol, updatessiCotizacionDetalleRol } = require('../controllers/ssiCotizacionDetalleRol.controller');
 
 const { SendEmail } = require('../controllers/ssiSendEmail');
 const { APIJiraAsses, APIJiraExec } = require('../controllers/APIJira');
@@ -14,6 +15,7 @@ const { APIJiraAsses, APIJiraExec } = require('../controllers/APIJira');
 const pool = require('../db');
 
 const router = Router();
+//console.log(router)
 
 // router.get('/tasks', async(req, res) =>{
 //     const result = await pool.query('SELECT NOW()');
@@ -64,7 +66,8 @@ router.get('/ssiCotizacionVista', getAllssiCotizacionVista);
 router.get('/ssiCotizacionVista/:id', getssiCotizacionVista);
 
 // ROUTES DE ROL
-router.get('/ssiCotizacionRol', getAllssiRol)
+router.get('/ssiCotizacionRol', getAllssiRol);
+
 
 // ROUTES DE LECTURA (/ssiCotizacionLectura)
 router.get('/ssiCotizacionClients', getAllssiClients)
@@ -97,5 +100,12 @@ router.post('/sedEmail', SendEmail)
 //Jira
 router.post('/APIJiraAsses', APIJiraAsses);
 router.post('/APIJiraExec', APIJiraExec);
+
+// ROUTES DE COTIZACION-DETALLE-ROL (NUEVO)
+router.get('/ssiCotizacionDetalleRolAll', getAllssiCotizacionDetalleRol);
+router.get('/ssiCotizacionDetalleRolOne/:id', getssiCotizacionDetalleRol);
+router.post('/ssiCotizacionDetalleRolCreate', createssiCotizacionDetalleRol);
+router.put('/ssiCotizacionDetalleRolUpdate/:id', updatessiCotizacionDetalleRol);
+router.delete('/ssiCotizacionDetalleRolDelete/:id', deletessiCotizacionDetalleRol);
 
 module.exports = router;

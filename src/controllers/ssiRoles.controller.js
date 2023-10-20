@@ -1,6 +1,7 @@
 const pool = require('../db');
 
 const getAllssiRol = async (req, res, next) => {
+    //console.log("entro a Rol")
     try{
         const result = await pool.query('SELECT * FROM public.ssi_roles;');
 
@@ -10,6 +11,8 @@ const getAllssiRol = async (req, res, next) => {
     }
 }
 
+
 module.exports = {
-    getAllssiRol
+    getAllssiRol,
+
 }
