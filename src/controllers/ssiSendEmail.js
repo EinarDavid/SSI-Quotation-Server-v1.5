@@ -37,7 +37,7 @@ const SendEmail = async (req, res, next) => {
 
         var mailOptions = {
             from: 'einar.villarroel@salamancasolutions.com',
-            to: 'einar.villarroel@salamancasolutions.com',
+            to: 'roxana.machaca@salamancasolutions.com',
             subject: subject,
             html: textBody
         };
