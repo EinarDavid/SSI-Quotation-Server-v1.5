@@ -39,7 +39,7 @@ const APIJiraAsses = async (req, res, next) => {
 
   } catch (error) {
     console.error(error);
-    return res.json({ message: 'Hubo un error en la solicitud al actualizar el Jira. Verifique si el Código Jira existe' });
+    return res.json({ message: 'Hubo un error en la solicitud al actualizar el Jira. Verifique si el Código Jira existe', error });
   }
 
 }
@@ -84,7 +84,7 @@ const APIJiraExec = async (req, res, next) => {
 
   } catch (error) {
     console.error(error);
-    return res.json({ message: 'Hubo un error en la solicitud al actualizar el Jira. Verifique si el Código Jira existe' });
+    return res.json({ message: 'Hubo un error en la solicitud al actualizar el Jira. Verifique si el Código Jira existe', error });
   }
 
 }
