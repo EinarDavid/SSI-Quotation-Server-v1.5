@@ -11,7 +11,7 @@ const SendEmail = async (req, res, next) => {
             requireTLS: true,
             auth: {
                 user: 'einar.villarroel@salamancasolutions.com',
-                pass: 'oqolswvkufwbbgbl'
+                pass: 'esfkkaugvmfriosd'
             }
         });
         // import generateHash from 'random-hash';
