@@ -394,6 +394,40 @@ const getLabourDaysInformation = async (req, res, next) => {
     }
 }
 
+// UPDATE HEADER INFORMATION
+const updateHeaderInformation = async (req, res, next) => {
+     //const {id} = req.params;
+     console.log('Data recibida', req.body)
+     const { id_quotation, id_order, client, responsible, project_type, project_code, link_jira, project_chgreq_code } = req.body;
+    
+
+    try {
+        const result = await pool.query('UPDATE public.ssi_quotation\
+        SET  id_order = $2,\
+        client = $3,\
+        responsible = $4,\
+        project_type = $5,\
+        project_code = $6,\
+        link_jira = $7,\
+        project_chgreq_code = $8\
+        WHERE  id_quotation = $1 RETURNING *', [ id_quotation,
+               id_order, 
+               client,
+               responsible,
+               project_type,               
+               project_code,
+               link_jira,
+               project_chgreq_code
+           ]);
+
+        res.json({ data: result.rows[0], message: 'Información de Cotizacion actualizada correctamente' });
+
+    } catch (error) {
+        next(error);
+        // res.json({ error: error.message }); //esto solo en desarrollo en produccion un 500
+    }
+}
+
 // FILTERS
 
 const getInformationByFilters = async (req, res, next) => {
@@ -486,5 +520,6 @@ module.exports = {
     getResourceDetailByQuotationId,
     getResourceAllocationDetail,
     getLabourDaysInformation,
-    getInformationByFilters
+    getInformationByFilters,
+    updateHeaderInformation
 }    

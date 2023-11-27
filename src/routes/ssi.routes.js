@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const { getAllssiClients, getAllssiResources, getAllssiCatalogProjectType, getAllssiCatalogRequirement, getAllssiCatalogResource, getAllWeeksByYear, getAllMonths, getAllYears,updatessiQuotation, createssiQuotation, insertResourceDetail, updateResourceDetail, getResourceAllocationDetail, getLabourDaysInformation, getResourceDetailByQuotationId, getInformationByFilters } = require('../controllers/ssiCotizacionLectura.controller');
+const { getAllssiClients, getAllssiResources, getAllssiCatalogProjectType, getAllssiCatalogRequirement, getAllssiCatalogResource, getAllWeeksByYear, getAllMonths, getAllYears,updatessiQuotation, createssiQuotation, insertResourceDetail, updateResourceDetail, getResourceAllocationDetail, getLabourDaysInformation, getResourceDetailByQuotationId, getInformationByFilters, updateHeaderInformation } = require('../controllers/ssiCotizacionLectura.controller');
 const { getAllssiCotizacion, createssiCotizacion, getssiCotizacion, updatessiCotizacion, updatessiCotizacionStatus, deletessiCotizacion, getCantQuotation, getQuotationOne } = require('../controllers/ssiCotizacion.controller');
 const { getAllssiCotizacionDetalle, createssiCotizacionDetalle, getssiCotizacionDetalle, deletessiCotizacionDetalle, updatessiCotizacionDetalle } = require('../controllers/ssiCotizacionDetalle.controller');
 const { getAllssiCotizacionDetalleLog, createssiCotizacionDetalleLog, getssiCotizacionDetalleLog, deletessiCotizacionDetalleLog } = require('../controllers/ssiCotizacionDetalleLog.controller');
@@ -78,6 +78,8 @@ router.get('/ssiCotizacionCatResource', getAllssiCatalogResource)
 //cotizacion
 router.post('/ssiCotizacionCreatesQuotation', createssiQuotation)
 router.post('/ssiCotizacionUpdatessiQuotation', updatessiQuotation)
+router.post('/ssiCotizacionUpdateHeaderInformation', updateHeaderInformation)
+
 //detalle
 router.post('/ssiCotizacion/InsertResourceDetail', insertResourceDetail)
 router.post('/ssiCotizacion/UpdateResourceDetail', updateResourceDetail)

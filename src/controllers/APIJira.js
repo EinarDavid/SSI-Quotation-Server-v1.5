@@ -25,7 +25,7 @@ const APIJiraAsses = async (req, res, next) => {
 
     const requestData = {
       fields: {
-        customfield_10208: Number(effort),
+        customfield_10208: Number(effort), 
         //customfield_10209: null
       }
     };
